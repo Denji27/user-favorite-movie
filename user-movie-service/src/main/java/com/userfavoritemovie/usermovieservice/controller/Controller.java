@@ -31,7 +31,7 @@ public class Controller {
         return ResponseEntity.ok(this.userMovieService.createUser(newUser));
     }
 
-    // thêm một bộ phim mới
+    // thêm một bộ phim mới (add a new film)
     @PutMapping("/movie")
     public ResponseEntity<RecommendedMovie> addMovie(@RequestBody NewMovie newMovie){
         return ResponseEntity.ok(this.userMovieService.addMovie(newMovie));
