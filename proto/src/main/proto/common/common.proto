@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common;
+
+option java_multiple_files = true;
+option java_package = "com.example.userfavoritemovie.common";
+
+enum FavoriteGenre{
+  DRAMA = 0;
+  ACTION = 1;
+  CRIME = 2;
+  WESTERN = 3;
+}

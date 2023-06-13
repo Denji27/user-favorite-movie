@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "common/common.proto";
+option java_multiple_files = true;
+option java_package = "com.example.userfavoritemovie.user";
+
+message UserSearchRequest{
+  string loginId = 1;
+}
+
+message CreateUserRequest{
+  string loginId = 1;
+  string name = 2;
+}
+
+message UserResponse{
+  string loginId = 1;
+  string name = 2;
+  common.FavoriteGenre favoriteGenre = 3;
+}
+
+message UserFavoriteGenreUpdateRequest{
+  string loginId = 1;
+  common.FavoriteGenre favoriteGenre = 2;
+}
+
+service UserService{
+  rpc getUserFavoriteGenre(UserSearchRequest) returns (UserResponse);
+  rpc updateUserFavoriteGenre(UserFavoriteGenreUpdateRequest) returns (UserResponse);
+  rpc createUser(CreateUserRequest) returns (UserResponse);
+}

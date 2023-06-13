@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+import "common/common.proto";
+option java_multiple_files = true;
+option java_package = "com.example.userfavoritemovie.movie";
+
+
+message MovieDto{
+  string title = 1;
+  int32 year = 2;
+  double rating = 3;
+}
+
+message AddMovieRequest{
+  string title = 1;
+  int32 releaseYear = 2;
+  double rating = 3;
+  common.FavoriteGenre genre = 4;
+}
+
+message MovieSearchRequest{
+  common.FavoriteGenre genre = 1;
+}
+
+message MovieSearchResponse{
+  repeated MovieDto movie = 1;
+}
+
+service MovieService{
+  rpc getMovies(MovieSearchRequest) returns (MovieSearchResponse);
+  rpc addMovie(AddMovieRequest) returns (MovieDto);
+}
