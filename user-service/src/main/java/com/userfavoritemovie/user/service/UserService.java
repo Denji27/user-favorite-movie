@@ -1,6 +1,7 @@
 package com.userfavoritemovie.user.service;
 
 import com.example.userfavoritemovie.common.FavoriteGenre;
+import com.example.userfavoritemovie.movie.MovieSearchResponse;
 import com.example.userfavoritemovie.user.*;
 import com.userfavoritemovie.user.entity.User;
 import com.userfavoritemovie.user.repository.UserRepository;

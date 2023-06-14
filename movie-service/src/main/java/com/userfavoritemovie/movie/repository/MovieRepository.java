@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
     List<Movie> getMovieByGenreOrderByYearDesc(String genre);
+    Movie findMovieByTitle(String title);
 }

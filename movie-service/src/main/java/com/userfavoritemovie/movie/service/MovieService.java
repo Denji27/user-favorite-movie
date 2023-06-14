@@ -46,4 +46,23 @@ public class MovieService extends MovieServiceGrpc.MovieServiceImplBase {
         responseObserver.onNext(movieDto);
         responseObserver.onCompleted();
     }
+
+    @Override
+    public void getMovieStream(MovieSearchRequest request, StreamObserver<MovieDto> responseObserver) {
+        List<Movie> movieList = this.movieRepo.getMovieByGenreOrderByYearDesc(request.getGenre().toString());
+        for (Movie movie : movieList){
+            MovieDto movieDto = MovieDto.newBuilder()
+                    .setTitle(movie.getTitle())
+                    .setYear(movie.getYear())
+                    .setRating(movie.getRating())
+                    .build();
+            responseObserver.onNext(movieDto);
+        }
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public StreamObserver<DecreaseRatingRequest> decreaseRating(StreamObserver<MovieDto> movieDtoStreamObserver) {
+        return new RatingStreamRequest(movieDtoStreamObserver);
+    }
 }

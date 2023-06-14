@@ -1,5 +1,6 @@
 package com.userfavoritemovie.usermovieservice.controller;
 
+import com.google.protobuf.Descriptors;
 import com.userfavoritemovie.usermovieservice.dto.*;
 import com.userfavoritemovie.usermovieservice.service.UserMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class Controller {
@@ -35,6 +37,11 @@ public class Controller {
     @PutMapping("/movie")
     public ResponseEntity<RecommendedMovie> addMovie(@RequestBody NewMovie newMovie){
         return ResponseEntity.ok(this.userMovieService.addMovie(newMovie));
+    }
+
+    @GetMapping("/movie/{genre}")
+    public List<Map<Descriptors.FieldDescriptor, Object>> getMovieStream(@PathVariable String genre) throws InterruptedException {
+        return this.userMovieService.getMovieStream(genre);
     }
 
 }

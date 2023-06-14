@@ -26,7 +26,14 @@ message MovieSearchResponse{
   repeated MovieDto movie = 1;
 }
 
+message DecreaseRatingRequest{
+  string title = 1;
+  double decreaseRating = 2;
+}
+
 service MovieService{
   rpc getMovies(MovieSearchRequest) returns (MovieSearchResponse);
+  rpc getMovieStream(MovieSearchRequest) returns (stream MovieDto);
   rpc addMovie(AddMovieRequest) returns (MovieDto);
+  rpc decreaseRating(stream DecreaseRatingRequest) returns (MovieDto);
 }
