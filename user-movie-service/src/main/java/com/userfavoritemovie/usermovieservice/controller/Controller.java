@@ -44,4 +44,9 @@ public class Controller {
         return this.userMovieService.getMovieStream(genre);
     }
 
+    @PutMapping("/movie/decrease-rating")
+    public ResponseEntity<RecommendedMovie> decreaseRating(@RequestBody DecreaseRating decreaseRating) throws InterruptedException {
+        return ResponseEntity.ok(this.userMovieService.decreaseRating(decreaseRating));
+    }
+
 }

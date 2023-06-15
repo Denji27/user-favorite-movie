@@ -114,4 +114,37 @@ public class UserMovieService {
 //                .forEachRemaining(movieDto -> response.add(movieDto.getAllFields()));
 //        return response;
     }
+    public RecommendedMovie decreaseRating(DecreaseRating decreaseRating) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        DecreaseRatingRequest decreaseRatingRequest = DecreaseRatingRequest.newBuilder()
+                .setTitle(decreaseRating.getTitle())
+                .setDecreaseRating(decreaseRating.getDecreaseRating())
+                .build();
+        RecommendedMovie recommendedMovie = new RecommendedMovie();
+        StreamObserver<DecreaseRatingRequest> requestStreamObserver = this.movieStub.decreaseRating(new StreamObserver<MovieDto>() {
+            @Override
+            public void onNext(MovieDto movieDto) {
+                recommendedMovie.setTitle(movieDto.getTitle());
+                recommendedMovie.setRating(movieDto.getRating());
+                recommendedMovie.setYear(movieDto.getYear());
+                log.info("movieDto: {}", recommendedMovie);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                latch.countDown();
+            }
+
+            @Override
+            public void onCompleted() {
+                latch.countDown();
+            }
+        });
+        for (int i = 0; i<5; i++){
+            requestStreamObserver.onNext(decreaseRatingRequest);
+        }
+        requestStreamObserver.onCompleted();
+        latch.await();
+        return recommendedMovie;
+    }
 }

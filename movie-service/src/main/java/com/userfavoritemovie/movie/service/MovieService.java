@@ -63,6 +63,35 @@ public class MovieService extends MovieServiceGrpc.MovieServiceImplBase {
 
     @Override
     public StreamObserver<DecreaseRatingRequest> decreaseRating(StreamObserver<MovieDto> movieDtoStreamObserver) {
-        return new RatingStreamRequest(movieDtoStreamObserver);
+        return new StreamObserver<DecreaseRatingRequest>() {
+            private String title;
+            private int year;
+            private double rating;
+            @Override
+            public void onNext(DecreaseRatingRequest decreaseRatingRequest) {
+                String title = decreaseRatingRequest.getTitle();
+                double decreaseRating = decreaseRatingRequest.getDecreaseRating();
+                Movie movie = movieRepo.findMovieByTitle(title);
+                this.rating = movie.getRating() - decreaseRating;
+                movie.setRating(rating);
+                movieRepo.save(movie);
+                this.title = movie.getTitle();
+                this.year = movie.getYear();
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+
+            @Override
+            public void onCompleted() {
+                MovieDto movieDto = MovieDto.newBuilder()
+                        .setTitle(this.title).setRating(this.rating).setYear(this.year)
+                        .build();
+                movieDtoStreamObserver.onNext(movieDto);
+                movieDtoStreamObserver.onCompleted();
+            }
+        };
     }
 }
