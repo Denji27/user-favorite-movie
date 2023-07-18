@@ -1,4 +1,4 @@
-package com.userfavoritemovie.user.entity;
+package com.example.entity;
 
 import lombok.*;
 

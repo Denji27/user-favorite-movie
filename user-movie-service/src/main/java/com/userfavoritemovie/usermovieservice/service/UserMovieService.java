@@ -8,6 +8,7 @@ import com.userfavoritemovie.usermovieservice.dto.*;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.log4j.Log4j2;
 import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,24 +22,34 @@ import java.util.stream.Collectors;
 @Log4j2
 @Service
 public class UserMovieService {
-    @GrpcClient("user-service")
+    @Autowired
     private UserServiceGrpc.UserServiceBlockingStub userBlockingStub;
 
-    @GrpcClient("user-service")
+    @Autowired
     private UserServiceGrpc.UserServiceStub userStub;
 
-    @GrpcClient("movie-service")
+    @Autowired
     private MovieServiceGrpc.MovieServiceBlockingStub movieBlockingSub;
 
-    @GrpcClient("movie-service")
+    @Autowired
     private MovieServiceGrpc.MovieServiceStub movieStub;
 
     public List<RecommendedMovie> getUserMovieSuggestion(String loginId){
         UserSearchRequest userSearchRequest = UserSearchRequest.newBuilder()
                 .setLoginId(loginId)
                 .build();
+        for (int i = 0; i < 10; i++) {
+            UserResponse userResponse0 = this.userBlockingStub.getUserFavoriteGenre(userSearchRequest);
+            System.out.println(userResponse0.getName() + i);
+        }
         UserResponse userResponse = this.userBlockingStub.getUserFavoriteGenre(userSearchRequest);
         MovieSearchRequest movieSearchRequest = MovieSearchRequest.newBuilder().setGenre(userResponse.getFavoriteGenre()).build();
+
+        for (int i = 0; i < 10; i++) {
+            MovieSearchResponse movieSearchResponse0 = this.movieBlockingSub.getMovies(movieSearchRequest);
+            System.out.println("request for movie" + i);
+        }
+
         MovieSearchResponse movieSearchResponse = this.movieBlockingSub.getMovies(movieSearchRequest);
         return movieSearchResponse.getMovieList()
                 .stream()

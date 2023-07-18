@@ -1,10 +1,10 @@
 package com.userfavoritemovie.movie.service;
 
-
 import com.example.userfavoritemovie.movie.*;
 import com.userfavoritemovie.movie.entity.Movie;
 import com.userfavoritemovie.movie.repository.MovieRepository;
 import io.grpc.stub.StreamObserver;
+import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @GrpcService
-public class MovieService extends MovieServiceGrpc.MovieServiceImplBase {
+
+public class Movie1Service extends MovieServiceGrpc.MovieServiceImplBase {
     @Autowired
     private MovieRepository movieRepo;
 
@@ -27,6 +28,7 @@ public class MovieService extends MovieServiceGrpc.MovieServiceImplBase {
                         .build())
                 .collect(Collectors.toList());
         System.out.println("received request for " + request.getGenre());
+        System.out.println(request.getGenre());
         responseObserver.onNext(MovieSearchResponse.newBuilder().addAllMovie(movieDtoList).build());
         responseObserver.onCompleted();
     }
